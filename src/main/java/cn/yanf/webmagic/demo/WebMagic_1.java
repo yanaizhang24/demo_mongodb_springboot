@@ -10,14 +10,26 @@ public class WebMagic_1 implements PageProcessor {
 
     @Override
     public void process(Page page) {
+        //regex为正则
+        //xpath为xml选择器
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
         page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
+        //
         page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
         if (page.getResultItems().get("name")==null){
-            //skip this page
+            //如果“name”是null就跳过
+            System.out.println();
             page.setSkip(true);
         }
         page.putField("readme", page.getHtml().xpath("//div[@id='readme']/tidyText()"));
+        // 部分三：从页面发现后续的url地址来抓取
+       // page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
+//        这段代码的分为两部分，
+//        page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all()
+//        用于获取所有满足"(https:/ /github\.com/\w+/\w+)"这个正则表达式的链接，
+//        page.addTargetRequests()则将这些链接加入到待抓取的队列中去。
+        //List<String> urls = page.getHtml().css("div.pagination").links().regex(".*/search/\?l=java.*").all();
+        //page.addTargetRequests(urls);
     }
 
     @Override
