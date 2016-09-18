@@ -1,8 +1,9 @@
 package cn.yanf.webmagic.demo;
 
-import cn.yanf.Repository.CustomerRepository;
 import cn.yanf.Repository.TieBarRepository;
 import cn.yanf.entity.TieBar;
+import cn.yanf.entity.TieBarBiaoQ;
+import cn.yanf.entity.TieBarTieZ;
 import cn.yanf.webmagic.piplline.MongodbPipeline;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -27,7 +28,6 @@ public class BaiDUT implements PageProcessor{
     private Site site = Site.me().setRetryTimes(3).setSleepTime(500);
     public static final String URL_LIST = "http://tieba\\.baidu\\.com/f\\?kw=.*";
     public static  int count=0;
-    public static List<TieBar> list;
     private static TieBarRepository repository;
 
     public TieBarRepository getRepository() {
@@ -40,7 +40,8 @@ public class BaiDUT implements PageProcessor{
     public void process(Page page) {
 //        page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
 //        page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
-        list=new ArrayList<TieBar>();
+        List<TieBar> list=new ArrayList();
+        List<TieBar> list2=new ArrayList();
         count++;
         System.out.println(count);
        if(page.getUrl().regex(URL_LIST).match()) {//帖子标签页
@@ -53,7 +54,9 @@ public class BaiDUT implements PageProcessor{
                page.putField("title" + i, s.xpath("//a/text()"));
                page.putField("href" + i, s.xpath("//a/@href"));
                page.addTargetRequest(s.xpath("//a/@href").toString());
+               TieBarBiaoQ tb=new TieBarBiaoQ(i+"",s.xpath("//a/@href").toString());
                page.putField("id", ++i);
+               list.add(tb);
            }
 
 
@@ -79,9 +82,19 @@ public class BaiDUT implements PageProcessor{
                page.putField("href"+i_p,s.xpath("//a[@class='p_author_name j_user_card']/@href"));
                page.putField("content"+i_p,s.xpath("//div[@class='p_content  ']/cc/div[@class='d_post_content j_d_post_content ']/text()"));
                page.addTargetRequests(page.getHtml().xpath("//li[@class='l_pager pager_theme_5 pb_list_pager']").links().all());
+               TieBarTieZ tbz=new TieBarTieZ(page.getUrl().toString(),
+                       page.getHtml().xpath("//h3[@class='core_title_txt pull-left text-overflow  ']/@title").toString(),
+                       s.xpath("//a[@class='p_author_name j_user_card']/text()").toString(),
+                       s.xpath("//div[@class='p_content  ']/cc/div[@class='d_post_content j_d_post_content ']/text()").toString(),
+                       s.xpath("//a[@class='p_author_name j_user_card']/@href").toString());
+               list2.add(tbz);
            }
        }
         //page.addTargetRequests(al);
+        if(list.size()>0)
+            page.putField("list",list);
+        if(list2.size()>0)
+            page.putField("list2",list2);
     }
 
     public Site getSite() {
@@ -98,7 +111,7 @@ public class BaiDUT implements PageProcessor{
         }
         //Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB&ie=utf-8").addPipeline(new ConsolePipeline()).addPipeline(new JsonFilePipeline("D:\\webmagic\\"));
         Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5").
-                addPipeline(new MongodbPipeline(new ArrayList<TieBar>(),repository)).addPipeline(new FilePipeline("D:\\webmagic\\"));
+                addPipeline(new MongodbPipeline(repository)).addPipeline(new FilePipeline("D:\\webmagic\\"));
 
         try {
             SpiderMonitor.instance().register(git);

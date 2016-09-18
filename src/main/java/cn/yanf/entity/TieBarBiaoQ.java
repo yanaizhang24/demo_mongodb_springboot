@@ -8,6 +8,11 @@ import org.springframework.data.annotation.Id;
 public class TieBarBiaoQ extends TieBar{
     @Id
     private String id;
+    private String number;
     private String url;
 
+    public TieBarBiaoQ(String number, String url) {
+        this.number = number;
+        this.url = url;
+    }
 }

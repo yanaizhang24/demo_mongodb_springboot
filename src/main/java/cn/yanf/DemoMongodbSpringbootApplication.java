@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 
@@ -17,11 +18,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @SpringBootApplication
+@PropertySource("classpath:application.properties")
 public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 	@Autowired
 	private CustomerRepository repository;
 	@Autowired
-	private TieBarRepository repositoryTieBar;
+	private TieBarRepository tieBarrepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoMongodbSpringbootApplication.class, args);
@@ -31,7 +33,7 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... strings) throws Exception {
-		//repository.deleteAll();
+//		repository.deleteAll();
 //
 //		//save a couple of customers
 //		repository.save(new Customer("yan","feng"));
@@ -66,7 +68,7 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 //		System.out.println("链接");
 //		c.connect();
 		BaiDUT pp=new BaiDUT();
-		pp.setTieBarRepository(repositoryTieBar);
+		pp.setTieBarRepository(tieBarrepository);
 		pp.main(new String[]{});
 	}
 }
