@@ -1,10 +1,15 @@
 package cn.yanf.webmagic.demo;
 
+import cn.yanf.Repository.CustomerRepository;
+import cn.yanf.Repository.TieBarRepository;
+import cn.yanf.entity.TieBar;
+import cn.yanf.webmagic.piplline.MongodbPipeline;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.monitor.SpiderMonitor;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
+import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
@@ -22,9 +27,20 @@ public class BaiDUT implements PageProcessor{
     private Site site = Site.me().setRetryTimes(3).setSleepTime(500);
     public static final String URL_LIST = "http://tieba\\.baidu\\.com/f\\?kw=.*";
     public static  int count=0;
+    public static List<TieBar> list;
+    private static TieBarRepository repository;
+
+    public TieBarRepository getRepository() {
+        return repository;
+    }
+
+    public void setTieBarRepository(TieBarRepository repository) {
+        this.repository = repository;
+    }
     public void process(Page page) {
 //        page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
 //        page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
+        list=new ArrayList<TieBar>();
         count++;
         System.out.println(count);
        if(page.getUrl().regex(URL_LIST).match()) {//帖子标签页
@@ -73,6 +89,7 @@ public class BaiDUT implements PageProcessor{
     }
     public static void main(String[] args) {
         //http://tieba.baidu.com/f?kw=%E5%AE%88%E6%9C%9B%E5%85%88%E9%94%8B&ie=utf-8
+        //http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5
 
         try {
             System.out.println(URLDecoder.decode("http://tieba.baidu.com/f?kw=%E5%AE%88%E6%9C%9B%E5%85%88%E9%94%8B&ie=utf-8","UTF-8"));
@@ -80,7 +97,8 @@ public class BaiDUT implements PageProcessor{
             e.printStackTrace();
         }
         //Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB&ie=utf-8").addPipeline(new ConsolePipeline()).addPipeline(new JsonFilePipeline("D:\\webmagic\\"));
-        Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%E5%AE%88%E6%9C%9B%E5%85%88%E9%94%8B&ie=utf-8").addPipeline(new ConsolePipeline()).addPipeline(new JsonFilePipeline("D:\\webmagic\\"));
+        Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5").
+                addPipeline(new MongodbPipeline(new ArrayList<TieBar>(),repository)).addPipeline(new FilePipeline("D:\\webmagic\\"));
 
         try {
             SpiderMonitor.instance().register(git);
