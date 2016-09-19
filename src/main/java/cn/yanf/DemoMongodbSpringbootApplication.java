@@ -4,6 +4,7 @@ import cn.yanf.Repository.CustomerRepository;
 import cn.yanf.Repository.TieBarRepository;
 import cn.yanf.entity.Customer;
 import cn.yanf.webSocket.ExampleClient;
+import cn.yanf.webmagic.demo.Alibaba;
 import cn.yanf.webmagic.demo.BaiDUT;
 import org.java_websocket.drafts.Draft_17;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +70,11 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 //		}
 //		System.out.println("链接");
 //		c.connect();
-		BaiDUT pp=new BaiDUT();
-		pp.setTieBarRepository(tieBarrepository);
-		pp.main(new String[]{});
+//		BaiDUT pp=new BaiDUT();
+//		pp.setTieBarRepository(tieBarrepository);
+//		pp.main(new String[]{});
+//        Alibaba ali=new Alibaba();
+//        ali.setTieBarRepository(tieBarrepository);
+//        ali.main(new String[]{});
 	}
 }

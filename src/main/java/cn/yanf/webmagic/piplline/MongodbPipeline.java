@@ -1,6 +1,7 @@
 package cn.yanf.webmagic.piplline;
 
 import cn.yanf.Repository.TieBarRepository;
+import cn.yanf.entity.AlibabaEN;
 import cn.yanf.entity.TieBar;
 import cn.yanf.entity.TieBarBiaoQ;
 import us.codecraft.webmagic.ResultItems;
@@ -37,6 +38,11 @@ public class MongodbPipeline implements Pipeline {
         if(resultItems.getAll().containsKey("list2")){
             for(TieBar tb:(List<TieBar>)resultItems.getAll().get("list2")){
                 repository.save(tb);
+            }
+        }
+        if(resultItems.getAll().containsKey("list_ali")){
+            for(TieBar ali:(List<TieBar>)resultItems.getAll().get("list_ali")){
+                repository.save(ali);
             }
         }
 

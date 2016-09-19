@@ -11,6 +11,30 @@ public class TieBarBiaoQ extends TieBar{
     private String number;
     private String url;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public TieBarBiaoQ(String number, String url) {
         this.number = number;
         this.url = url;
