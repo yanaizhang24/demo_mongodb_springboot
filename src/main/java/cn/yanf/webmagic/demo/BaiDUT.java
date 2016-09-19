@@ -110,7 +110,9 @@ public class BaiDUT implements PageProcessor{
         }
         //Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB&ie=utf-8").addPipeline(new ConsolePipeline()).addPipeline(new JsonFilePipeline("D:\\webmagic\\"));
         Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5").
-                addPipeline(new MongodbPipeline(repository)).addPipeline(new FilePipeline("D:\\webmagic\\"));
+                addPipeline(new MongodbPipeline(repository))
+                //.addPipeline(new FilePipeline("D:\\webmagic\\"))
+                ;
 
         try {
             SpiderMonitor.instance().register(git);

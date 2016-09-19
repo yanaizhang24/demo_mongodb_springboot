@@ -25,7 +25,6 @@ public class MongodbPipeline implements Pipeline {
     public void process(ResultItems resultItems, Task task) {
         System.out.println("get page: " + resultItems.getRequest().getUrl());
         Iterator i$ = resultItems.getAll().entrySet().iterator();
-
         while(i$.hasNext()) {
             Map.Entry entry = (Map.Entry)i$.next();
             System.out.println((String)entry.getKey() + ":\t" + entry.getValue());

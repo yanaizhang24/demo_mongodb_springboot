@@ -26,7 +26,9 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 	private TieBarRepository tieBarrepository;
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoMongodbSpringbootApplication.class, args);
+		SpringApplication springApplication=new SpringApplication(DemoMongodbSpringbootApplication.class);
+		springApplication.addListeners(new ApplicationStartUp());
+		springApplication.run(args);
 
 
 	}
