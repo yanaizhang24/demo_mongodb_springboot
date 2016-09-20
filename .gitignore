@@ -5,6 +5,7 @@
 *.bak
 *.iml
 *.txt
+*.rar
 
 /.git
 mvnw
