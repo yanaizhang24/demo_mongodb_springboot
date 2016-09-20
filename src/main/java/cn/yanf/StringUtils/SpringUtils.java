@@ -32,7 +32,10 @@ public class SpringUtils implements Serializable,CommandLineRunner {
             repository.save(new Customer("102160613134951192168402401009",strings[0]));
     }
     public  static <T> boolean writeData(List<T> list,String fileName){
-        File file=new File(fileName);
+        Date date=new Date();
+        DateFormat dateFormatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd-HH:mm");
+        File file=new File(fileName+dateFormat.format(date)+".txt");
         if(file.exists()){//文件已存在
             return false;
         }else{
@@ -45,8 +48,7 @@ public class SpringUtils implements Serializable,CommandLineRunner {
         try {
             FileWriter fileWriter=new FileWriter(file.getName(),true);
             BufferedWriter bufferedWriter=new BufferedWriter(fileWriter);
-            Date date=new Date();
-            DateFormat dateFormatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             bufferedWriter.write(dateFormatter.format(date));
             bufferedWriter.newLine();
             for(T t:list){

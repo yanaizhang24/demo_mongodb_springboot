@@ -49,7 +49,7 @@ public class Controller {
 
             }
         }
-        SpringUtils.writeData(list_ali,"ali.txt");
+        SpringUtils.writeData(list_ali,"ali");
         //List<VePeSdto> list2=new ArrayList<VePeSdto>();
        // list.add(new Customer("count",list.size()+""));
         return list_ali;
