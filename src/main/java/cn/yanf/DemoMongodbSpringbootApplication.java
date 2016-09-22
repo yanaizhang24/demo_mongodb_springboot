@@ -73,8 +73,8 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 //		BaiDUT pp=new BaiDUT();
 //		pp.setTieBarRepository(tieBarrepository);
 //		pp.main(new String[]{});
-//        Alibaba ali=new Alibaba();
-//        ali.setTieBarRepository(tieBarrepository);
-//        ali.main(new String[]{});
+        Alibaba ali=new Alibaba();
+        ali.setTieBarRepository(tieBarrepository);
+        ali.main(new String[]{});
 	}
 }

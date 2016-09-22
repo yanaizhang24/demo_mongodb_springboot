@@ -80,17 +80,24 @@ public class BaiDUT implements PageProcessor{
                    i_p = (Integer) page.getResultItems().get("id");
                else
                    i_p = 1;
-               if("热门推荐".equals(s.xpath("//a[@class='p_author_name j_user_card']/text()").toString()))
+               //剔除热门推荐
+               if("热门推荐".equals(s.xpath("//a[@class='p_author_name j_click_stats']/text()").toString().trim()))
                    continue;
                page.putField("id",i_p);
                page.putField("author"+i_p,s.xpath("//a[@class='p_author_name j_user_card']/text()"));
                page.putField("href"+i_p,s.xpath("//a[@class='p_author_name j_user_card']/@href"));
                page.putField("content"+i_p,s.xpath("//div[@class='p_content  ']/cc/div[@class='d_post_content j_d_post_content ']/text()"));
+               //首先判断有没有回复
+               //再判断有几页回复
+               //只有一页，直接获取
+               //后续的依靠拼接：
+               // http://tieba.baidu.com/p/comment?tid=4791604128&pid=98137268553&pn=2   &t=1474561684093
+               //这个直接用jsoup获取地址然后直接解析
                page.addTargetRequests(page.getHtml().xpath("//li[@class='l_pager pager_theme_5 pb_list_pager']").links().all());
                TieBarTieZ tbz=new TieBarTieZ(page.getUrl().toString(),
                        page.getHtml().xpath("//h3[@class='core_title_txt pull-left text-overflow  ']/@title").toString(),
                        s.xpath("//a[@class='p_author_name j_user_card']/text()").toString(),
-                       s.xpath("//div[@class='p_content  ']/cc/div[@class='d_post_content j_d_post_content ']/text()").toString(),
+                       s.xpath("//div[@class='p_content  ']/cc/div[@class='d_post_content j_d_post_content ']/text()").toString().trim(),
                        s.xpath("//a[@class='p_author_name j_user_card']/@href").toString());
                list2.add(tbz);
            }
@@ -103,7 +110,9 @@ public class BaiDUT implements PageProcessor{
         //lzl_single_post j_lzl_s_p
         //<li class="lzl_single_post j_lzl_s_p first_no_border"
         // data-field="{'pid':'68598834140','spid':'68626823885','user_name':'水煮冰淇淋a','portrait':'1c98e6b0b4e785aee586b0e6b787e6b78b617515'}"><a data-field="{'un':'水煮冰淇淋a'}" target="_blank" class="j_user_card lzl_p_p" href="/home/main?un=%E6%B0%B4%E7%85%AE%E5%86%B0%E6%B7%87%E6%B7%8Ba&amp;ie=utf-8&amp;fr=pb" username="水煮冰淇淋a"><img src="http://tb.himg.baidu.com/sys/portrait/item/1c98e6b0b4e785aee586b0e6b787e6b78b617515"></a><div class="lzl_cnt"><a class="at j_user_card " data-field="{'un':'水煮冰淇淋a'}" alog-group="p_author" target="_blank" href="/home/main?un=%E6%B0%B4%E7%85%AE%E5%86%B0%E6%B7%87%E6%B7%8Ba&amp;ie=utf-8&amp;fr=pb" username="水煮冰淇淋a">水煮冰淇淋a</a>:&nbsp;<span class="lzl_content_main">？？</span><div class="lzl_content_reply"><span class="lzl_jb" style="display: none;"><a href="#" data-field="{'delete_mine':'0','user_name':'水煮冰淇淋a'}" class="lzl_jb_in">举报</a>&nbsp;|&nbsp;</span><span class="lzl_op_list j_lzl_o_l"></span><span class="lzl_time">2015-5-19&nbsp;10:55</span><a href="#" class="lzl_s_r">回复</a></div></div><div class="user-hide-post-down" style="top: 36px; right: 158px; display: none;"></div></li>
+        //只要有隐藏的就会有
         //<p class="j_pager l_pager pager_theme_2 lzl_pager" style="display:none"><span class="tP">1</span><a href="#" index="2">2</a><a href="#" index="3">3</a><a href="#" index="2">下一页</a><a href="#" index="3">尾页</a></p>
+
     }
 
     public Site getSite() {
