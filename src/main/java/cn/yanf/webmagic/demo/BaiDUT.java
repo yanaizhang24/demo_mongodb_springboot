@@ -14,6 +14,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.monitor.SpiderMonitor;
+import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
@@ -46,6 +47,7 @@ public class BaiDUT implements PageProcessor{
         List<TieBar> list=new ArrayList();
         List<TieBar> list2=new ArrayList();
         count++;
+        //page.getHtml().links();
         System.out.println(count);
        if(page.getUrl().regex(URL_LIST).match()) {//帖子标签页
            int i;//作为帖子的ID
@@ -98,6 +100,10 @@ public class BaiDUT implements PageProcessor{
             page.putField("list",list);
         if(list2.size()>0)
             page.putField("list2",list2);
+        //lzl_single_post j_lzl_s_p
+        //<li class="lzl_single_post j_lzl_s_p first_no_border"
+        // data-field="{'pid':'68598834140','spid':'68626823885','user_name':'水煮冰淇淋a','portrait':'1c98e6b0b4e785aee586b0e6b787e6b78b617515'}"><a data-field="{'un':'水煮冰淇淋a'}" target="_blank" class="j_user_card lzl_p_p" href="/home/main?un=%E6%B0%B4%E7%85%AE%E5%86%B0%E6%B7%87%E6%B7%8Ba&amp;ie=utf-8&amp;fr=pb" username="水煮冰淇淋a"><img src="http://tb.himg.baidu.com/sys/portrait/item/1c98e6b0b4e785aee586b0e6b787e6b78b617515"></a><div class="lzl_cnt"><a class="at j_user_card " data-field="{'un':'水煮冰淇淋a'}" alog-group="p_author" target="_blank" href="/home/main?un=%E6%B0%B4%E7%85%AE%E5%86%B0%E6%B7%87%E6%B7%8Ba&amp;ie=utf-8&amp;fr=pb" username="水煮冰淇淋a">水煮冰淇淋a</a>:&nbsp;<span class="lzl_content_main">？？</span><div class="lzl_content_reply"><span class="lzl_jb" style="display: none;"><a href="#" data-field="{'delete_mine':'0','user_name':'水煮冰淇淋a'}" class="lzl_jb_in">举报</a>&nbsp;|&nbsp;</span><span class="lzl_op_list j_lzl_o_l"></span><span class="lzl_time">2015-5-19&nbsp;10:55</span><a href="#" class="lzl_s_r">回复</a></div></div><div class="user-hide-post-down" style="top: 36px; right: 158px; display: none;"></div></li>
+        //<p class="j_pager l_pager pager_theme_2 lzl_pager" style="display:none"><span class="tP">1</span><a href="#" index="2">2</a><a href="#" index="3">3</a><a href="#" index="2">下一页</a><a href="#" index="3">尾页</a></p>
     }
 
     public Site getSite() {
@@ -106,15 +112,20 @@ public class BaiDUT implements PageProcessor{
     public static void main(String[] args) {
         //http://tieba.baidu.com/f?kw=%E5%AE%88%E6%9C%9B%E5%85%88%E9%94%8B&ie=utf-8
         //http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5
-
+        //Spider git2=Spider.create(new BaiDUT());
+        //git2.test("http://tieba.baidu.com/p/comment?tid=4736113607&pid=96242089508&pn=1");
         try {
             System.out.println(URLDecoder.decode("http://tieba.baidu.com/f?kw=%E5%AE%88%E6%9C%9B%E5%85%88%E9%94%8B&ie=utf-8","UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         //Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB&ie=utf-8").addPipeline(new ConsolePipeline()).addPipeline(new JsonFilePipeline("D:\\webmagic\\"));
-        Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5").
-                addPipeline(new MongodbPipeline(repository))
+        Spider git=Spider.create(new BaiDUT()).addUrl(
+                //"http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5"
+                "http://tieba.baidu.com/p/comment?tid=4736113607&pid=96242089508&pn=1"
+                )
+                .addPipeline(new ConsolePipeline())
+                //.addPipeline(new MongodbPipeline(repository))
                 //.addPipeline(new FilePipeline("D:\\webmagic\\"))
                 ;
 
