@@ -2,6 +2,7 @@ package cn.yanf.StringUtils;
 
 import cn.yanf.Repository.CustomerRepository;
 import cn.yanf.entity.Customer;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.format.datetime.DateFormatter;
@@ -60,5 +61,12 @@ public class SpringUtils implements Serializable,CommandLineRunner {
             e.printStackTrace();
         }
         return false;
+    }
+    public static String trim(String str){
+        if(StringUtils.isNotEmpty(str)){
+            return str.trim();
+
+        }
+        return null;
     }
 }

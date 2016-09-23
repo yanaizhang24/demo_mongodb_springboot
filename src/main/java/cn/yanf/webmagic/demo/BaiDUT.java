@@ -31,6 +31,7 @@ import java.util.List;
 public class BaiDUT implements PageProcessor{
     private Site site = Site.me().setRetryTimes(3).setSleepTime(500);
     public static final String URL_LIST = "http://tieba\\.baidu\\.com/f\\?kw=.*";
+    public static final String BAI_TZ="http://http://tieba\\.baidu\\.com/p/\\d*";
     public static  int count=0;
     private static TieBarRepository repository;
 
@@ -144,6 +145,7 @@ public class BaiDUT implements PageProcessor{
             e.printStackTrace();
         }
         git.thread(5).run();
+        //git.close();
     }
 
     //test selenium
