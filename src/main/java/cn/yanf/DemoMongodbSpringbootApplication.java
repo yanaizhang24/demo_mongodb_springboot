@@ -70,11 +70,11 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 //		}
 //		System.out.println("链接");
 //		c.connect();
-//		BaiDUT pp=new BaiDUT();
-//		pp.setTieBarRepository(tieBarrepository);
-//		pp.main(new String[]{});
-        Alibaba ali=new Alibaba();
-        ali.setTieBarRepository(tieBarrepository);
-        ali.main(new String[]{});
+		BaiDUT pp=new BaiDUT();
+		pp.setTieBarRepository(tieBarrepository);
+		pp.main(new String[]{});
+//        Alibaba ali=new Alibaba();
+//        ali.setTieBarRepository(tieBarrepository);
+//        ali.main(new String[]{});
 	}
 }

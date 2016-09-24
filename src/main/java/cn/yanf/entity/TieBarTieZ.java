@@ -2,6 +2,8 @@ package cn.yanf.entity;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/9/18 0018.
  */
@@ -13,6 +15,17 @@ public class TieBarTieZ extends TieBar{
     private String author;
     private String content;
     private String href;
+    private List<TieBarTieZReply> reply;
+
+    public List<TieBarTieZReply> getReply() {
+        return reply;
+    }
+
+    public void setReply(List<TieBarTieZReply> reply) {
+        this.reply = reply;
+    }
+
+
 
     public String getId() {
         return id;

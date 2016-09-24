@@ -1,6 +1,7 @@
 package cn.yanf.webmagic.demo;
 
 import cn.yanf.StringUtils.SpringUtils;
+import cn.yanf.entity.TieBarTieZReply;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -17,6 +18,8 @@ import us.codecraft.webmagic.selector.Selectable;
 
 import javax.management.JMException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,14 +65,22 @@ public class BaiduTT implements PageProcessor {
                     try {
                         String url_replay="http://tieba.baidu.com/p/comment?tid="+id_tiezi+"&pid="+strs[2]+"&pn=1";
                         Document document= Jsoup.connect(url_replay).get();
+                        Elements author=document.select("a.j_user_card.lzl_p_p");
                         Elements content = document.getElementsByClass("lzl_content_main");
-                        for(Element element:content){
+                        List<TieBarTieZReply> list_tiebartiezreply=new ArrayList<>();
+                        for(Element element:author){
+                            String href=element.attr("href");
+                            String author_name=element.attr("username");
+                            TieBarTieZReply tieBarTieZReply=new TieBarTieZReply(author_name,href,null);
+                            list_tiebartiezreply.add(tieBarTieZReply);
+                        }
+                        for(int i_content=0;i_content<content.size();i_content++){
                             //Elements links = element.getElementsByTag("img");
 //                            for (Element link : links) {
 //                                String linkHref = link.attr("href");
 //                                String linkText = link.text();
 //                            }
-                           System.out.println( element.text());
+                           list_tiebartiezreply.get(i_content).setContent(content.get(i_content).text());
                         }
                         //lzl_li_pager j_lzl_l_p lzl_li_pager_s
                         //lzl_li_pager j_lzl_l_p lzl_li_pager_s
@@ -87,7 +98,7 @@ public class BaiduTT implements PageProcessor {
                         }
                         if(pageNum>1){
                             for(int i_n=2;i_n<=pageNum;i_n++){
-                                getReply("http://tieba.baidu.com/p/comment?tid="+id_tiezi+"&pid="+strs[2]+"&pn="+i_n);
+                                SpringUtils.getReply("http://tieba.baidu.com/p/comment?tid="+id_tiezi+"&pid="+strs[2]+"&pn="+i_n);
                             }
                         }
 
