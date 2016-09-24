@@ -1,6 +1,7 @@
 package cn.yanf.webmagic.demo;
 
 import cn.yanf.StringUtils.SpringUtils;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -70,14 +71,18 @@ public class BaiduTT implements PageProcessor {
 //                            }
                            System.out.println( element.text());
                         }
-                        Elements page_reply=document.getElementsByClass("j_pager l_pager pager_theme_2 lzl_pager");
+                        //lzl_li_pager j_lzl_l_p lzl_li_pager_s
+                        //lzl_li_pager j_lzl_l_p lzl_li_pager_s
+                        //lzl_li_pager j_lzl_l_p lzl_li_pager_s
+                        //jsoup中选择器中某一个元素的多个条件之间不要加空格 ， 加了空格下一个条件就变成子元素的条件了
+                        Elements page_reply=document.select("li.lzl_li_pager.j_lzl_l_p.lzl_li_pager_s");
                         int pageNum=1;
                         if(page_reply.size()>0){
                             for(Element e:page_reply){
-                                Elements as=e.getElementsByTag("a");
-                                if(as.size()>0){
-                                    pageNum=Integer.parseInt(as.last().attr("index"));
-                                }
+                                //{"total_num":19,"total_page":2}
+                                String as=e.attr("data-field");
+                                JSONObject jo= JSONObject.fromObject(as);
+                                pageNum=Integer.parseInt(jo.getString("total_page"));
                             }
                         }
                         if(pageNum>1){
