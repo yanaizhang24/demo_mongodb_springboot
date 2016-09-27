@@ -1,7 +1,9 @@
 package cn.yanf.webmagic.demo;
 
 
+import cn.yanf.Repository.TieBarBiaoQRepository;
 import cn.yanf.Repository.TieBarRepository;
+import cn.yanf.Repository.TieBarTieZRepository;
 import cn.yanf.StringUtils.SpringUtils;
 import cn.yanf.entity.TieBar;
 import cn.yanf.entity.TieBarBiaoQ;
@@ -45,6 +47,24 @@ public class BaiDUT implements PageProcessor{
     public static final String BAI_TZ="(http://tieba\\.baidu\\.com/p/)(\\d*)";
     public static  int count=0;
     private static TieBarRepository repository;
+    private static TieBarTieZRepository tieBarTieZRepository;
+    private static TieBarBiaoQRepository tieBarBiaoQRepository;
+
+    public static TieBarTieZRepository getTieBarTieZRepository() {
+        return tieBarTieZRepository;
+    }
+
+    public static void setTieBarTieZRepository(TieBarTieZRepository tieBarTieZRepository) {
+        BaiDUT.tieBarTieZRepository = tieBarTieZRepository;
+    }
+
+    public static TieBarBiaoQRepository getTieBarBiaoQRepository() {
+        return tieBarBiaoQRepository;
+    }
+
+    public static void setTieBarBiaoQRepository(TieBarBiaoQRepository tieBarBiaoQRepository) {
+        BaiDUT.tieBarBiaoQRepository = tieBarBiaoQRepository;
+    }
 
     public TieBarRepository getRepository() {
         return repository;
@@ -175,7 +195,7 @@ public class BaiDUT implements PageProcessor{
                TieBarTieZ tbz=new TieBarTieZ(page.getUrl().toString(),
                        page.getHtml().xpath("//h3[@class='core_title_txt pull-left text-overflow  ']/@title").toString(),
                        s.xpath("//a[@class='p_author_name j_user_card']/text()").toString(),
-                       s.xpath("//div[@class='p_content  ']/cc/div[@class='d_post_content j_d_post_content ']/text()").toString().trim(),
+                       SpringUtils.trim(s.xpath("//div[@class='p_content  ']/cc/div[@class='d_post_content j_d_post_content ']/text()").toString()),
                        s.xpath("//a[@class='p_author_name j_user_card']/@href").toString());
                if(list_tiebartiezreply.size()>0){
                    tbz.setReply(list_tiebartiezreply);
@@ -211,11 +231,14 @@ public class BaiDUT implements PageProcessor{
         }
         //Spider git=Spider.create(new BaiDUT()).addUrl("http://tieba.baidu.com/f?kw=%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB&ie=utf-8").addPipeline(new ConsolePipeline()).addPipeline(new JsonFilePipeline("D:\\webmagic\\"));
         Spider git=Spider.create(new BaiDUT()).addUrl(
-                "http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5"
+                //"http://tieba.baidu.com/f?kw=%C8%E7%B9%FB%C4%E3%B5%B0%CC%DB"//如果你蛋疼
+                //"http://tieba.baidu.com/f?kw=%CD%F8%C2%E7%C5%C0%B3%E6&fr=ala0&tpl=5"//网络爬虫
+                "http://tieba.baidu.com/f?kw=%C0%FA%CA%B7"//历史
                 //"http://tieba.baidu.com/p/comment?tid=4736113607&pid=96242089508&pn=1"
                 )
                 //.addPipeline(new ConsolePipeline())
-                .addPipeline(new MongodbPipeline(repository))
+                //.addPipeline(new MongodbPipeline(repository))
+                .addPipeline(new MongodbPipeline(tieBarBiaoQRepository,tieBarTieZRepository))
                 //.addPipeline(new FilePipeline("D:\\webmagic\\"))
                 ;
 

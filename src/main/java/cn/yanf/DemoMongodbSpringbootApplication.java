@@ -1,8 +1,11 @@
 package cn.yanf;
 
 import cn.yanf.Repository.CustomerRepository;
+import cn.yanf.Repository.TieBarBiaoQRepository;
 import cn.yanf.Repository.TieBarRepository;
+import cn.yanf.Repository.TieBarTieZRepository;
 import cn.yanf.entity.Customer;
+import cn.yanf.entity.TieBarBiaoQ;
 import cn.yanf.webSocket.ExampleClient;
 import cn.yanf.webmagic.demo.Alibaba;
 import cn.yanf.webmagic.demo.BaiDUT;
@@ -25,10 +28,16 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 	private CustomerRepository repository;
 	@Autowired
 	private TieBarRepository tieBarrepository;
+	@Autowired
+	private TieBarRepository<TieBarBiaoQ,String> tieBarRepository2;
+	@Autowired
+	private TieBarBiaoQRepository tieBarBiaoQRepository;
+	@Autowired
+	private TieBarTieZRepository tieBarTieZRepository;
 
 	public static void main(String[] args) {
 		SpringApplication springApplication=new SpringApplication(DemoMongodbSpringbootApplication.class);
-		springApplication.addListeners(new ApplicationStartUp());
+		//springApplication.addListeners(new ApplicationStartUp());
 		springApplication.run(args);
 
 
@@ -36,6 +45,7 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... strings) throws Exception {
+		tieBarBiaoQRepository.save(new TieBarBiaoQ("12","21131adsfas"));
 //		repository.deleteAll();
 //
 //		//save a couple of customers
@@ -72,6 +82,8 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 //		c.connect();
 		BaiDUT pp=new BaiDUT();
 		pp.setTieBarRepository(tieBarrepository);
+		pp.setTieBarBiaoQRepository(tieBarBiaoQRepository);
+		pp.setTieBarTieZRepository(tieBarTieZRepository);
 		pp.main(new String[]{});
 //        Alibaba ali=new Alibaba();
 //        ali.setTieBarRepository(tieBarrepository);
