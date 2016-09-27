@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -27,25 +28,30 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 	@Autowired
 	private CustomerRepository repository;
 	@Autowired
-	private TieBarRepository tieBarrepository;
+	private  TieBarRepository tieBarrepository;
 	@Autowired
 	private TieBarRepository<TieBarBiaoQ,String> tieBarRepository2;
 	@Autowired
-	private TieBarBiaoQRepository tieBarBiaoQRepository;
+	private  TieBarBiaoQRepository tieBarBiaoQRepository;
 	@Autowired
-	private TieBarTieZRepository tieBarTieZRepository;
+	private  TieBarTieZRepository tieBarTieZRepository;
 
 	public static void main(String[] args) {
 		SpringApplication springApplication=new SpringApplication(DemoMongodbSpringbootApplication.class);
 		//springApplication.addListeners(new ApplicationStartUp());
-		springApplication.run(args);
 
+		final ApplicationContext applicationContext=springApplication.run(args);
+        BaiDUT pp=new BaiDUT();
+        pp.setTieBarRepository(applicationContext.getBean(TieBarRepository.class));
+        pp.setTieBarBiaoQRepository(applicationContext.getBean(TieBarBiaoQRepository.class));
+        pp.setTieBarTieZRepository(applicationContext.getBean(TieBarTieZRepository.class));
+        pp.main(new String[]{});
 
 	}
 
 	@Override
 	public void run(String... strings) throws Exception {
-		tieBarBiaoQRepository.save(new TieBarBiaoQ("12","21131adsfas"));
+		//tieBarBiaoQRepository.save(new TieBarBiaoQ("12","21131adsfas"));
 //		repository.deleteAll();
 //
 //		//save a couple of customers
@@ -80,11 +86,7 @@ public class DemoMongodbSpringbootApplication implements CommandLineRunner{
 //		}
 //		System.out.println("链接");
 //		c.connect();
-		BaiDUT pp=new BaiDUT();
-		pp.setTieBarRepository(tieBarrepository);
-		pp.setTieBarBiaoQRepository(tieBarBiaoQRepository);
-		pp.setTieBarTieZRepository(tieBarTieZRepository);
-		pp.main(new String[]{});
+
 //        Alibaba ali=new Alibaba();
 //        ali.setTieBarRepository(tieBarrepository);
 //        ali.main(new String[]{});
