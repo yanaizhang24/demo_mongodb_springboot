@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Administrator on 2016/8/30 0030.
@@ -103,5 +104,9 @@ public class SpringUtils implements Serializable,CommandLineRunner {
             list_tiebartiezreply.get(i_content).setContent(content.get(i_content).text());
         }
         return list_tiebartiezreply;
+    }
+    public static String UUID(){
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replaceAll("-", "");
     }
 }
